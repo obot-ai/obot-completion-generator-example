@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@obot-ai/completion-generator": "^1.1.0",
+    "@obot-ai/completion-generator": "^1.1.1",
     "vue": "^3.3.4",
     "vuex": "^4.0.2"
   },
