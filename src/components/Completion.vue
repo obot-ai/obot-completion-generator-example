@@ -8,6 +8,25 @@ const API_KEY = import.meta.env.VITE_INPUT_COMPLETION_KEY
 const matcherProperties: CompletionMatcherProperties = {
   keywordSeparator: ",",
   minKeywordLength: 2,
+  maxResults: 15,
+  scorer: (data: MatchedResultData, _: string, __: string) => {
+    let score = 0
+    if (Array.isArray(data.matchedKeywords)) {
+      for (const kw of data.matchedKeywords) {
+        score += 10 * kw.text.length
+      }
+    }
+    if (data.noKeywordMatchedLength) {
+      score += 0.1 * data.noKeywordMatchedLength
+    }
+    return score
+  },
+  sort: (rsA: MatchedResultData, rsB: MatchedResultData, _: string, __: string) => {
+    if (rsA.score && rsB.score) {
+      return rsB.score - rsA.score
+    }
+    return 0
+  }
 }
 const matcher = new KeywordForwardMatcher(matcherProperties)
 const generator = new Generator({
