@@ -6,31 +6,33 @@ import { Fetcher, Generator, KeywordForwardMatcher } from "@obot-ai/completion-g
 const input = ref('')
 const API_KEY = import.meta.env.VITE_INPUT_COMPLETION_KEY
 const matcherProperties: CompletionMatcherProperties = {
-  keywordSeparator: ",",
-  minKeywordLength: 2,  // キーワードの部分一致と判定される最小長さ
-  maxResults: 15,  // 返される結果の最大個数
-  scorer: (data: MatchedResultData, _: string, __: string) => {
-    // 点数付けルールを変更する場合に設定、設定しない場合はデフォルトのルールで点数付けられます
-    let score = 0
-    if (Array.isArray(data.matchedKeywords)) {
-      for (const kw of data.matchedKeywords) {
-        score += 10 * kw.text.length
-      }
-    }
-    if (data.noKeywordMatchedLength) {
-      score += 0.1 * data.noKeywordMatchedLength
-    }
-    return score
-  },
-  sort: (rsA: MatchedResultData, rsB: MatchedResultData, _: string, __: string) => {
-    // マッチ結果のソートルールを変更する場合に設定、設定しない場合はデフォルトのルールでソートされます
-    if (rsA.score && rsB.score) {
-      return rsB.score - rsA.score
-    }
-    return 0
-  }
+  /* 以下のコメントアウトは一部設定の例です、設定しなくてもデフォルト設定で処理を行います */
+
+  // minKeywordLength: 2,  // キーワードの部分一致と判定される最小長さ
+  // maxResults: 15,  // 返される結果の最大個数
+  // scorer: (data: MatchedResultData, _: string, __: string) => {
+  //   // 点数付けルールを変更する場合に設定、設定しない場合はデフォルトのルールで点数付けられます
+  //   let score = 0
+  //   if (Array.isArray(data.matchedKeywords)) {
+  //     for (const kw of data.matchedKeywords) {
+  //       score += 10 * kw.text.length
+  //     }
+  //   }
+  //   if (data.noKeywordMatchedLength) {
+  //     score += 0.1 * data.noKeywordMatchedLength
+  //   }
+  //   return score
+  // },
+  // sort: (rsA: MatchedResultData, rsB: MatchedResultData, _: string, __: string) => {
+  //   // マッチ結果のソートルールを変更する場合に設定、設定しない場合はデフォルトのルールでソートされます
+  //   if (rsA.score && rsB.score) {
+  //     return rsB.score - rsA.score
+  //   }
+  //   return 0
+  // }
 }
 const matcher = new KeywordForwardMatcher(matcherProperties)
+
 const generator = new Generator({
   matcher: matcher
 })
