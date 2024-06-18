@@ -7,9 +7,10 @@ const input = ref('')
 const API_KEY = import.meta.env.VITE_INPUT_COMPLETION_KEY
 const matcherProperties: CompletionMatcherProperties = {
   keywordSeparator: ",",
-  minKeywordLength: 2,
-  maxResults: 15,
+  minKeywordLength: 2,  // キーワードの部分一致と判定される最小長さ
+  maxResults: 15,  // 返される結果の最大個数
   scorer: (data: MatchedResultData, _: string, __: string) => {
+    // 点数付けルールを変更する場合に設定、設定しない場合はデフォルトのルールで点数付けられます
     let score = 0
     if (Array.isArray(data.matchedKeywords)) {
       for (const kw of data.matchedKeywords) {
@@ -22,6 +23,7 @@ const matcherProperties: CompletionMatcherProperties = {
     return score
   },
   sort: (rsA: MatchedResultData, rsB: MatchedResultData, _: string, __: string) => {
+    // マッチ結果のソートルールを変更する場合に設定、設定しない場合はデフォルトのルールでソートされます
     if (rsA.score && rsB.score) {
       return rsB.score - rsA.score
     }
